@@ -113,7 +113,8 @@ module Capistrano
       def find_task(name)
         parts = name.to_s.split(/:/)
         tail = parts.pop
-        tail = tail.to_sym if tail
+        return nil unless tail
+        tail = tail.to_sym
 
         ns = self
         until parts.empty?
