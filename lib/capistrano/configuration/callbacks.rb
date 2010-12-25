@@ -125,6 +125,7 @@ module Capistrano
           msg = "triggering #{event} callbacks"
           msg << " for `#{task.fully_qualified_name}'" if task
           logger.trace(msg)
+          puts "TASK: #{task}"
           pending.each { |callback| callback.call }
         end
       end
