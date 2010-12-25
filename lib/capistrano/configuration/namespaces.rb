@@ -111,7 +111,7 @@ module Capistrano
       # refers to a namespace, the task in that namespace named "default"
       # will be returned instead, if one exists.
       def find_task(name)
-        return nil if name.empty?
+        return nil if name.nil?
         parts = name.to_s.split(/:/)
         tail = parts.pop
         tail = tail.to_sym
