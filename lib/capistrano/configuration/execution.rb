@@ -83,12 +83,12 @@ module Capistrano
 
       # Executes the task with the given name, without invoking any associated
       # callbacks.
-      def execute_task(task)
+      def execute_task(task, purge = true)
         logger.debug "executing `#{task.fully_qualified_name}'"
         push_task_call_frame(task)
         invoke_task_directly(task)
       ensure
-        pop_task_call_frame
+        pop_task_call_frame if purge
       end
 
       # Attempts to locate the task at the given fully-qualified path, and
@@ -98,10 +98,12 @@ module Capistrano
         task = find_task(path) or raise NoSuchTaskError, "the task `#{path}' does not exist"
 
         trigger(hooks[:before], task) if hooks[:before]
-        result = execute_task(task)
+        result = execute_task(task, false)
         trigger(hooks[:after], task) if hooks[:after]
 
         result
+      ensure
+        pop_task_call_frame
       end
 
     protected

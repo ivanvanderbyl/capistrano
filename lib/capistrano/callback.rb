@@ -34,7 +34,7 @@ module Capistrano
       @config = config
     end
 
-    def call
+    def call(task = nil)
       config.find_and_execute_task(source)
     end
 
