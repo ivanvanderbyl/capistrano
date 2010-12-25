@@ -7,7 +7,9 @@ module Capistrano
         base.send :alias_method, :initialize_without_execution, :initialize
         base.send :alias_method, :initialize, :initialize_with_execution
       end
-
+      
+      attr_accessor :last_task
+      
       # A struct for representing a single instance of an invoked task.
       TaskCallFrame = Struct.new(:task, :rollback)
 
@@ -83,12 +85,13 @@ module Capistrano
 
       # Executes the task with the given name, without invoking any associated
       # callbacks.
-      def execute_task(task, purge = true)
+      def execute_task(task)
         logger.debug "executing `#{task.fully_qualified_name}'"
+        self.last_task = task
         push_task_call_frame(task)
         invoke_task_directly(task)
       ensure
-        pop_task_call_frame if purge
+        pop_task_call_frame
       end
 
       # Attempts to locate the task at the given fully-qualified path, and
@@ -96,14 +99,14 @@ module Capistrano
       # be raised.
       def find_and_execute_task(path, hooks={})
         task = find_task(path) or raise NoSuchTaskError, "the task `#{path}' does not exist"
-
+        
+        self.last_task = task
+        
         trigger(hooks[:before], task) if hooks[:before]
-        result = execute_task(task, false)
+        result = execute_task(task)
         trigger(hooks[:after], task) if hooks[:after]
 
         result
-      ensure
-        pop_task_call_frame
       end
 
     protected
