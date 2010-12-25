@@ -112,7 +112,8 @@ module Capistrano
       # will be returned instead, if one exists.
       def find_task(name)
         parts = name.to_s.split(/:/)
-        tail = parts.pop.to_sym
+        tail = parts.pop
+        tail = tail.to_sym if tail
 
         ns = self
         until parts.empty?
