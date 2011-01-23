@@ -99,7 +99,7 @@ module Capistrano
 
         tasks[name] = TaskDefinition.new(name, self, {:desc => next_description(:reset)}.merge(options), &block)
         
-        task_count += 1
+        Configuration.instance.task_count += 1
         
         if !task_already_defined
           metaclass = class << self; self; end
