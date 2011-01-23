@@ -98,7 +98,9 @@ module Capistrano
         end
 
         tasks[name] = TaskDefinition.new(name, self, {:desc => next_description(:reset)}.merge(options), &block)
-
+        
+        task_count += 1
+        
         if !task_already_defined
           metaclass = class << self; self; end
           metaclass.send(:define_method, name) { execute_task(tasks[name]) }
