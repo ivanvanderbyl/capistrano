@@ -20,10 +20,10 @@ module Capistrano
   class Configuration
     # The logger instance defined for this configuration.
     attr_accessor :debug, :logger, :dry_run, :preserve_roles
-    attr_accessor :task_count
+    # attr_accessor :task_count
 
     def initialize(options={}) #:nodoc:
-      @task_count = 0
+      # @task_count = 0
       @debug = false
       @dry_run = false
       @preserve_roles = false
